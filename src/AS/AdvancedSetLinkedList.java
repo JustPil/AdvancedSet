@@ -188,15 +188,21 @@ public class AdvancedSetLinkedList implements AdvancedSetInterface
      */
     public String toString()
     {
-        String str = "[";
+        StringBuilder str = new StringBuilder("[");
         parser = head;
         while(parser != null)
         {
-            String spacing = parser.getNext() == null ? "" : " ";
-            str += parser.getData() + spacing;
+            if(parser.getNext() != null)
+            {
+                str.append(parser.getData()).append(" ");
+            }
+            else
+            {
+                str.append(parser.getData());
+            }
             parser = parser.getNext();
         }
-        return str + "]";
+        return str.append("]").toString();
     }
 
     /**
