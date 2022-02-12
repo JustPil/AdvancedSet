@@ -1,26 +1,42 @@
 package AS;
 
+import java.util.Comparator;
 import java.util.Random;
 
-public class AdvancedSetLinkedList implements AdvancedSetInterface
+public class AdvancedSetLinkedList<T> implements AdvancedSetInterface<T>
 {
-    private Node head;
-    private Node parser;
+    private Node<T> head;
+    private Node<T> parser;
     private int totalNodes = 0;
-    Random random = new Random();
+    private Random random = new Random();
+    private Comparator<T> comp;
+
+    /**
+     * Constructor instantiates a Comparator object.
+     */
+    public AdvancedSetLinkedList()
+    {
+        comp = new Comparator<T>()
+        {
+            public int compare(T o1, T o2)
+            {
+                return ((Comparable)o1).compareTo(o2);
+            }
+        };
+    }
 
     /**
      * add Adds an element to the linked list in sorted order if the element is unique.
      * @param element The data for the new node to hold.
      * @return True if the new node is successfully added, false otherwise.
      */
-    public boolean add(int element)
+    public boolean add(T element)
     {
         if(contains(element))
         {
             return false;
         }
-        Node node = new Node(element);
+        Node<T> node = new Node<>(element);
         if(totalNodes == 0)
         {
             head = node;
@@ -30,20 +46,21 @@ public class AdvancedSetLinkedList implements AdvancedSetInterface
             parser = head;
             while(parser != null)
             {
-                if(node.getData() <= head.getData() && parser == head)
+                if(comp.compare(node.getData(), head.getData()) >= 0 && parser == head)
                 {
                     node.setNext(head);
                     head = node;
                     break;
                 }
-                else if(node.getData() >= parser.getData() && parser.getNext() == null)
+                else if(comp.compare(node.getData(), parser.getData()) <= 0 && parser.getNext() == null)
                 {
                     parser.setNext(node);
                     break;
                 }
-                else if(node.getData() > parser.getData() && node.getData() <= parser.getNext().getData())
+                else if(comp.compare(node.getData(), parser.getData()) < 0 &&
+                        comp.compare(node.getData(), parser.getData()) >= 0)
                 {
-                    Node helper = parser.getNext();
+                    Node<T> helper = parser.getNext();
                     parser.setNext(node);
                     node.setNext(helper);
                     break;
@@ -60,7 +77,7 @@ public class AdvancedSetLinkedList implements AdvancedSetInterface
      * @param element The data to search for.
      * @return True if a Node containing the data is found, false otherwise.
      */
-    public boolean contains(int element)
+    public boolean contains(T element)
     {
         parser = head;
         while(parser != null)
@@ -82,7 +99,7 @@ public class AdvancedSetLinkedList implements AdvancedSetInterface
      * @param element The data to search for.
      * @return True if the Node is found and removed, false otherwise.
      */
-    public boolean remove(int element)
+    public boolean remove(T element)
     {
         parser = head;
         while(parser.getNext() != null)
@@ -147,16 +164,16 @@ public class AdvancedSetLinkedList implements AdvancedSetInterface
      * grab Grabs a random Node from the linked list.
      * @return The data contained in the randomly selected Node.
      */
-    public int grab()
+    public T grab()
     {
         if(totalNodes == 0)
         {
-            return 0;
+            return null;
         }
         int pick = random.nextInt(totalNodes);
         int tracker = 0;
         parser = head;
-        int grabbedItem = 0;
+        T grabbedItem = null;
         while(parser != null)
         {
             if(tracker == pick)
@@ -206,38 +223,54 @@ public class AdvancedSetLinkedList implements AdvancedSetInterface
     }
 
     /**
+     * getArrayCopy A copy constructor providing access to a copy of the internal elements array.
+     * @return A copy of the internal elements array.
+     */
+    public T[] getArrayCopy()
+    {
+        return null;
+    }
+
+    /**
+     * getLLCopy A copy constructor providing access to a copy of the internal elements linked list.
+     * @return A copy of the internal elements linked list.
+     */
+    public Node<T> getLLCopy()
+    {
+        Node<T> copyHead = new Node<>(head.getData());
+        Node<T> parser = head, copyParser = copyHead;
+        if(parser.getNext() != null)
+        {
+            parser = parser.getNext();
+            while(parser != null)
+            {
+                copyParser.setNext(new Node<>(parser.getData()));
+                copyParser = copyHead.getNext();
+                parser = parser.getNext();
+            }
+        }
+        return copyHead;
+    }
+
+    /**
      * union The union method creates a set that contains all unique elements in the current set and parameter set.
      * @param set The second set.
      * @return The union set.
      */
-    public AdvancedSetInterface union(AdvancedSetInterface set)
+    public AdvancedSetInterface<T> union(AdvancedSetInterface<T> set)
     {
-        AdvancedSetInterface union = new AdvancedSetLinkedList();
-        String str1 = this.toString();
-        String str2 = set.toString();
-        str1 = str1.replace("[", "");
-        str1 = str1.replace("]", "");
-        str2 = str2.replace("[", "");
-        str2 = str2.replace("]", "");
-        String[] split1 = str1.split(" ");
-        int[] arr1 = new int[split1.length];
-        String[] split2 = str2.split(" ");
-        int[] arr2 = new int[split2.length];
-        for(int i = 0; i < split1.length; i++)
+        AdvancedSetInterface<T> union = new AdvancedSetLinkedList<>();
+        Node<T> parser = head;
+        while(parser != null)
         {
-            arr1[i] = Integer.parseInt(split1[i]);
+            union.add(parser.getData());
+            parser = parser.getNext();
         }
-        for(int i = 0; i < split2.length; i++)
+        parser = set.getLLCopy();
+        while(parser != null)
         {
-            arr2[i] = Integer.parseInt(split2[i]);
-        }
-        for(int i : arr1)
-        {
-            union.add(i);
-        }
-        for(int i : arr2)
-        {
-            union.add(i);
+            union.add(parser.getData());
+            parser = parser.getNext();
         }
         return union;
     }
@@ -248,24 +281,17 @@ public class AdvancedSetLinkedList implements AdvancedSetInterface
      * @param set The second set.
      * @return The intersection set.
      */
-    public AdvancedSetInterface intersection(AdvancedSetInterface set)
+    public AdvancedSetInterface<T> intersection(AdvancedSetInterface<T> set)
     {
-        AdvancedSetInterface intersection = new AdvancedSetLinkedList();
-        String str1 = this.toString();
-        str1 = str1.replace("[", "");
-        str1 = str1.replace("]", "");
-        String[] split1 = str1.split(" ");
-        int[] arr1 = new int[split1.length];
-        for(int i = 0; i < split1.length; i++)
+        AdvancedSetInterface<T> intersection = new AdvancedSetLinkedList<>();
+        Node<T> parser = head;
+        while(parser != null)
         {
-            arr1[i] = Integer.parseInt(split1[i]);
-        }
-        for(int i : arr1)
-        {
-            if (set.contains(i))
+            if(set.contains(parser.getData()))
             {
-                intersection.add(i);
+                intersection.add(parser.getData());
             }
+            parser = parser.getNext();
         }
         return intersection;
     }
@@ -276,24 +302,17 @@ public class AdvancedSetLinkedList implements AdvancedSetInterface
      * @param set The second set.
      * @return The relative complement set.
      */
-    public AdvancedSetInterface complement(AdvancedSetInterface set)
+    public AdvancedSetInterface<T> complement(AdvancedSetInterface<T> set)
     {
-        AdvancedSetInterface complement = new AdvancedSetLinkedList();
-        String str1 = this.toString();
-        str1 = str1.replace("[", "");
-        str1 = str1.replace("]", "");
-        String[] split1 = str1.split(" ");
-        int[] arr1 = new int[split1.length];
-        for(int i = 0; i < split1.length; i++)
+        AdvancedSetInterface<T> complement = new AdvancedSetLinkedList<>();
+        Node<T> parser = head;
+        while(parser != null)
         {
-            arr1[i] = Integer.parseInt(split1[i]);
-        }
-        for(int i : arr1)
-        {
-            if(!set.contains(i))
+            if(!set.contains(parser.getData()))
             {
-                complement.add(i);
+                complement.add(parser.getData());
             }
+            parser = parser.getNext();
         }
         return complement;
     }
