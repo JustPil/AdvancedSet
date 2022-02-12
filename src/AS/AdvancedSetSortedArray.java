@@ -1,23 +1,39 @@
 package AS;
 
+import java.util.Comparator;
 import java.util.Random;
 
-public class AdvancedSetSortedArray implements AdvancedSetInterface
+public class AdvancedSetSortedArray<T> implements AdvancedSetInterface<T>
 {
     private int totalItems = 0;
     private final int CAPACITY = 50;
-    private int[] array = new int[CAPACITY];
+    private T[] array = (T[])new Object[CAPACITY];
     private Random random = new Random();
     private int foundPosition;
     private int insertPosition;
     private boolean finder;
+    private Comparator<T> comp;
+
+    /**
+     * Constructor instantiates a Comparator object.
+     */
+    public AdvancedSetSortedArray()
+    {
+        comp = new Comparator<T>()
+        {
+            public int compare(T o1, T o2)
+            {
+                return ((Comparable)o1).compareTo(o2);
+            }
+        };
+    }
 
     /**
      * binarySeach A binary search algorithm that finds the index of an element if contained in the array, or the
      * index that the element should be inserted if not present.
      * @param element The element to search in the array.
      */
-    private void binarySearch(int element)
+    private void binarySearch(T element)
     {
         finder = false;
         int start = 0;
@@ -25,14 +41,14 @@ public class AdvancedSetSortedArray implements AdvancedSetInterface
         foundPosition = -1;
         while(!finder && start <= end)
         {
-            int mid = (start + end) / 2;
-            if(array[mid] == element)
+            int mid = start + (end - start) / 2;
+            if(comp.compare(array[mid], element) == 0)
             {
                 finder = true;
                 foundPosition = mid;
                 return;
             }
-            else if(array[mid] > element)
+            else if(comp.compare(array[mid], element) < 0)
             {
                 end = mid - 1;
             }
@@ -49,7 +65,7 @@ public class AdvancedSetSortedArray implements AdvancedSetInterface
      * @param element The element to add into the array.
      * @return True if the item is added, false if not.
      */
-    public boolean add(int element)
+    public boolean add(T element)
     {
         if(totalItems == 0)
         {
@@ -81,7 +97,7 @@ public class AdvancedSetSortedArray implements AdvancedSetInterface
      * @param element The element to search for in the array.
      * @return True if the element is found, false otherwise.
      */
-    public boolean contains(int element)
+    public boolean contains(T element)
     {
         binarySearch(element);
         return finder;
@@ -92,7 +108,7 @@ public class AdvancedSetSortedArray implements AdvancedSetInterface
      * @param element The element to remove.
      * @return True if the element is removed, false otherwise.
      */
-    public boolean remove(int element)
+    public boolean remove(T element)
     {
         binarySearch(element);
         if(!finder)
@@ -102,10 +118,10 @@ public class AdvancedSetSortedArray implements AdvancedSetInterface
         else
         {
             boolean removeOnce = false;
-            int[] newArray = new int[CAPACITY];
+            T[] newArray = (T[])new Object[CAPACITY];
             for(int i = 0; i < totalItems; i++)
             {
-                if(array[i] == element && !removeOnce)
+                if(comp.compare(array[i], element) == 0 && !removeOnce)
                 {
                     removeOnce = true;
                 }
@@ -155,14 +171,9 @@ public class AdvancedSetSortedArray implements AdvancedSetInterface
      * grab Grabs a random element from the array.
      * @return The randomly chosen element.
      */
-    public int grab()
+    public T grab()
     {
-        if(totalItems == 0)
-        {
-            return 0;
-        }
-        int pick = random.nextInt(totalItems);
-        return array[pick];
+        return totalItems == 0 ? null : array[random.nextInt(totalItems)];
     }
 
     /**
@@ -170,7 +181,7 @@ public class AdvancedSetSortedArray implements AdvancedSetInterface
      */
     public void clear()
     {
-        array = new int[CAPACITY];
+        array = (T[])new Object[CAPACITY];
         totalItems = 0;
     }
 
@@ -190,38 +201,38 @@ public class AdvancedSetSortedArray implements AdvancedSetInterface
     }
 
     /**
+     * getArrayCopy A copy constructor providing access to a copy of the internal elements array.
+     * @return A copy of the internal elements array.
+     */
+    public T[] getArrayCopy()
+    {
+        return array.clone();
+    }
+
+    /**
+     * getLLCopy A copy constructor providing access to a copy of the internal elements linked list.
+     * @return A copy of the internal elements linked list.
+     */
+    public Node<T> getLLCopy()
+    {
+        return null;
+    }
+
+    /**
      * union The union method creates a set that contains all unique elements in the current set and parameter set.
      * @param set The second set.
      * @return The union set.
      */
-    public AdvancedSetInterface union(AdvancedSetInterface set)
+    public AdvancedSetInterface<T> union(AdvancedSetInterface<T> set)
     {
-        AdvancedSetInterface union = new AdvancedSetSortedArray();
-        String str1 = this.toString();
-        String str2 = set.toString();
-        str1 = str1.replace("[", "");
-        str1 = str1.replace("]", "");
-        str2 = str2.replace("[", "");
-        str2 = str2.replace("]", "");
-        String[] split1 = str1.split(" ");
-        int[] arr1 = new int[split1.length];
-        String[] split2 = str2.split(" ");
-        int[] arr2 = new int[split2.length];
-        for(int i = 0; i < split1.length; i++)
+        AdvancedSetInterface<T> union = new AdvancedSetSortedArray<>();
+        for(int i = 0; i < this.size(); i++)
         {
-            arr1[i] = Integer.parseInt(split1[i]);
+            union.add(array[i]);
         }
-        for(int i = 0; i < split2.length; i++)
+        for(int i = 0; i < set.size(); i++)
         {
-            arr2[i] = Integer.parseInt(split2[i]);
-        }
-        for(int i : arr1)
-        {
-            union.add(i);
-        }
-        for(int i : arr2)
-        {
-            union.add(i);
+            union.add(set.getArrayCopy()[i]);
         }
         return union;
     }
@@ -232,23 +243,15 @@ public class AdvancedSetSortedArray implements AdvancedSetInterface
      * @param set The second set.
      * @return The intersection set.
      */
-    public AdvancedSetInterface intersection(AdvancedSetInterface set)
+    public AdvancedSetInterface<T> intersection(AdvancedSetInterface<T> set)
     {
-        AdvancedSetInterface intersection = new AdvancedSetSortedArray();
-        String str1 = this.toString();
-        str1 = str1.replace("[", "");
-        str1 = str1.replace("]", "");
-        String[] split1 = str1.split(" ");
-        int[] arr1 = new int[split1.length];
-        for(int i = 0; i < split1.length; i++)
+        AdvancedSetInterface<T> intersection = new AdvancedSetSortedArray<>();
+        int minLength = Math.min(this.size(), set.size());
+        for(int i = 0; i < minLength; i++)
         {
-            arr1[i] = Integer.parseInt(split1[i]);
-        }
-        for(int i : arr1)
-        {
-            if(set.contains(i))
+            if(set.contains(array[i]))
             {
-                intersection.add(i);
+                intersection.add(array[i]);
             }
         }
         return intersection;
@@ -260,23 +263,15 @@ public class AdvancedSetSortedArray implements AdvancedSetInterface
      * @param set The second set.
      * @return The relative complement set.
      */
-    public AdvancedSetInterface complement(AdvancedSetInterface set)
+    public AdvancedSetInterface<T> complement(AdvancedSetInterface<T> set)
     {
-        AdvancedSetInterface complement = new AdvancedSetSortedArray();
-        String str1 = this.toString();
-        str1 = str1.replace("[", "");
-        str1 = str1.replace("]", "");
-        String[] split1 = str1.split(" ");
-        int[] arr1 = new int[split1.length];
-        for(int i = 0; i < split1.length; i++)
+        AdvancedSetInterface<T> complement = new AdvancedSetSortedArray<>();
+        int minLength = Math.min(this.size(), set.size());
+        for(int i = 0; i < minLength; i++)
         {
-            arr1[i] = Integer.parseInt(split1[i]);
-        }
-        for(int i : arr1)
-        {
-            if(!set.contains(i))
+            if(!set.contains(array[i]))
             {
-                complement.add(i);
+                complement.add(array[i]);
             }
         }
         return complement;
