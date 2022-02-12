@@ -11,7 +11,7 @@ public class Main
         Scanner scn = new Scanner(System.in);
         while(!choice.equalsIgnoreCase("X"))
         {
-            System.out.print("Advanced Set ADT Implementations\n1 = Sorted Set (Array)\n2 - Sorted Set (Linked " +
+            System.out.print("Advanced Set ADT Implementations\n1 - Sorted Set (Array)\n2 - Sorted Set (Linked " +
                     "List)\n3 - Unsorted Set (Array)\nX - Terminate\nEnter choice: ");
             choice = scn.nextLine();
             if(choice.equals("1"))
@@ -44,7 +44,7 @@ public class Main
      */
     public static void sortedSet(Scanner s)
     {
-        AdvancedSetInterface set = new AdvancedSetSortedArray();
+        AdvancedSetInterface<Integer> set = new AdvancedSetSortedArray<>();
         String choice = "";
         while(!choice.equalsIgnoreCase("X"))
         {
@@ -74,7 +74,7 @@ public class Main
             }
             else if(choice.equals("3"))
             {
-                System.out.print("Enter an integer to remove from the bad: ");
+                System.out.print("Enter an integer to remove from the set: ");
                 int input = s.nextInt();
                 s.nextLine();
                 System.out.println("Removed: " + set.remove(input));
@@ -107,7 +107,7 @@ public class Main
             else if(choice.equals("10"))
             {
                 System.out.println("To perform a UNION operation we require two sets. Creating SET 2...");
-                AdvancedSetInterface set2 = new AdvancedSetSortedArray();
+                AdvancedSetInterface<Integer> set2 = new AdvancedSetSortedArray<>();
                 String input = "";
                 while(!input.equalsIgnoreCase("X"))
                 {
@@ -117,13 +117,13 @@ public class Main
                     System.out.println("Continue [C] or Stop [X] ?");
                     input = s.nextLine();
                 }
-                AdvancedSetInterface union = set.union(set2);
+                AdvancedSetInterface<Integer> union = set.union(set2);
                 System.out.println("Performing UNION of SET 1 and SET 2:\n" + union.toString());
             }
             else if(choice.equals("11"))
             {
                 System.out.println("To perform an INTERSECTION operation we require two sets. Creating SET 2...");
-                AdvancedSetInterface set2 = new AdvancedSetSortedArray();
+                AdvancedSetInterface<Integer> set2 = new AdvancedSetSortedArray<>();
                 String input = "";
                 while(!input.equalsIgnoreCase("X"))
                 {
@@ -133,13 +133,13 @@ public class Main
                     System.out.println("Continue [C] or Stop [X] ?");
                     input = s.nextLine();
                 }
-                AdvancedSetInterface intersection = set.intersection(set2);
+                AdvancedSetInterface<Integer> intersection = set.intersection(set2);
                 System.out.println("Performing INTERSECTION of SET 1 and SET 2:\n" + intersection.toString());
             }
             else if(choice.equals("12"))
             {
                 System.out.println("To perform a COMPLEMENT operation we require two sets. Creating SET 2...");
-                AdvancedSetInterface set2 = new AdvancedSetSortedArray();
+                AdvancedSetInterface<Integer> set2 = new AdvancedSetSortedArray<>();
                 String input = "";
                 while(!input.equalsIgnoreCase("X"))
                 {
@@ -149,7 +149,7 @@ public class Main
                     System.out.println("Continue [C] or Stop [X] ?");
                     input = s.nextLine();
                 }
-                AdvancedSetInterface complement = set.complement(set2);
+                AdvancedSetInterface<Integer> complement = set.complement(set2);
                 System.out.println("Performing COMPLEMENT of SET 1 and SET 2:\n" + complement.toString());
             }
             else if(choice.equalsIgnoreCase("X"))
@@ -169,7 +169,7 @@ public class Main
      */
     public static void sortedLinkedSet(Scanner s)
     {
-        AdvancedSetInterface set = new AdvancedSetLinkedList();
+        AdvancedSetInterface<Integer> set = new AdvancedSetLinkedList<>();
         String choice = "";
         while(!choice.equalsIgnoreCase("X"))
         {
@@ -199,7 +199,7 @@ public class Main
             }
             else if(choice.equals("3"))
             {
-                System.out.print("Enter an integer to remove from the bad: ");
+                System.out.print("Enter an integer to remove from the set: ");
                 int input = s.nextInt();
                 s.nextLine();
                 System.out.println("Removed: " + set.remove(input));
@@ -232,7 +232,7 @@ public class Main
             else if(choice.equals("10"))
             {
                 System.out.println("To perform a UNION operation we require two sets. Creating SET 2...");
-                AdvancedSetInterface set2 = new AdvancedSetLinkedList();
+                AdvancedSetInterface<Integer> set2 = new AdvancedSetLinkedList<>();
                 String input = "";
                 while(!input.equalsIgnoreCase("X"))
                 {
@@ -242,13 +242,13 @@ public class Main
                     System.out.println("Continue [C] or Stop [X] ?");
                     input = s.nextLine();
                 }
-                AdvancedSetInterface union = set.union(set2);
+                AdvancedSetInterface<Integer> union = set.union(set2);
                 System.out.println("Performing UNION of SET 1 and SET 2:\n" + union.toString());
             }
             else if(choice.equals("11"))
             {
                 System.out.println("To perform an INTERSECTION operation we require two sets. Creating SET 2...");
-                AdvancedSetInterface set2 = new AdvancedSetLinkedList();
+                AdvancedSetInterface<Integer> set2 = new AdvancedSetLinkedList<>();
                 String input = "";
                 while(!input.equalsIgnoreCase("X"))
                 {
@@ -258,13 +258,13 @@ public class Main
                     System.out.println("Continue [C] or Stop [X] ?");
                     input = s.nextLine();
                 }
-                AdvancedSetInterface intersection = set.intersection(set2);
+                AdvancedSetInterface<Integer> intersection = set.intersection(set2);
                 System.out.println("Performing INTERSECTION of SET 1 and SET 2:\n" + intersection.toString());
             }
             else if(choice.equals("12"))
             {
                 System.out.println("To perform a COMPLEMENT operation we require two sets. Creating SET 2...");
-                AdvancedSetInterface set2 = new AdvancedSetLinkedList();
+                AdvancedSetInterface<Integer> set2 = new AdvancedSetLinkedList<>();
                 String input = "";
                 while(!input.equalsIgnoreCase("X"))
                 {
@@ -274,7 +274,7 @@ public class Main
                     System.out.println("Continue [C] or Stop [X] ?");
                     input = s.nextLine();
                 }
-                AdvancedSetInterface complement = set.complement(set2);
+                AdvancedSetInterface<Integer> complement = set.complement(set2);
                 System.out.println("Performing COMPLEMENT of SET 1 and SET 2:\n" + complement.toString());
             }
             else if(choice.equalsIgnoreCase("X"))
@@ -294,7 +294,7 @@ public class Main
      */
     public static void unsortedSet(Scanner s)
     {
-        AdvancedSetInterface set = new AdvancedSetUnsortedArray();
+        AdvancedSetInterface<Integer> set = new AdvancedSetUnsortedArray<>();
         String choice = "";
         while(!choice.equalsIgnoreCase("X"))
         {
@@ -324,7 +324,7 @@ public class Main
             }
             else if(choice.equals("3"))
             {
-                System.out.print("Enter an integer to remove from the bad: ");
+                System.out.print("Enter an integer to remove from the set: ");
                 int input = s.nextInt();
                 s.nextLine();
                 System.out.println("Removed: " + set.remove(input));
@@ -357,7 +357,7 @@ public class Main
             else if(choice.equals("10"))
             {
                 System.out.println("To perform a UNION operation we require two sets. Creating SET 2...");
-                AdvancedSetInterface set2 = new AdvancedSetUnsortedArray();
+                AdvancedSetInterface<Integer> set2 = new AdvancedSetUnsortedArray<>();
                 String input = "";
                 while(!input.equalsIgnoreCase("X"))
                 {
@@ -367,13 +367,13 @@ public class Main
                     System.out.println("Continue [C] or Stop [X] ?");
                     input = s.nextLine();
                 }
-                AdvancedSetInterface union = set.union(set2);
+                AdvancedSetInterface<Integer> union = set.union(set2);
                 System.out.println("Performing UNION of SET 1 and SET 2:\n" + union.toString());
             }
             else if(choice.equals("11"))
             {
                 System.out.println("To perform an INTERSECTION operation we require two sets. Creating SET 2...");
-                AdvancedSetInterface set2 = new AdvancedSetUnsortedArray();
+                AdvancedSetInterface<Integer> set2 = new AdvancedSetUnsortedArray<>();
                 String input = "";
                 while(!input.equalsIgnoreCase("X"))
                 {
@@ -383,13 +383,13 @@ public class Main
                     System.out.println("Continue [C] or Stop [X] ?");
                     input = s.nextLine();
                 }
-                AdvancedSetInterface intersection = set.intersection(set2);
+                AdvancedSetInterface<Integer> intersection = set.intersection(set2);
                 System.out.println("Performing INTERSECTION of SET 1 and SET 2:\n" + intersection.toString());
             }
             else if(choice.equals("12"))
             {
                 System.out.println("To perform a COMPLEMENT operation we require two sets. Creating SET 2...");
-                AdvancedSetInterface set2 = new AdvancedSetUnsortedArray();
+                AdvancedSetInterface<Integer> set2 = new AdvancedSetUnsortedArray<>();
                 String input = "";
                 while(!input.equalsIgnoreCase("X"))
                 {
@@ -399,7 +399,7 @@ public class Main
                     System.out.println("Continue [C] or Stop [X] ?");
                     input = s.nextLine();
                 }
-                AdvancedSetInterface complement = set.complement(set2);
+                AdvancedSetInterface<Integer> complement = set.complement(set2);
                 System.out.println("Performing COMPLEMENT of SET 1 and SET 2:\n" + complement.toString());
             }
             else if(choice.equalsIgnoreCase("X"))
