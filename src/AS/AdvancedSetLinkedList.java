@@ -238,7 +238,8 @@ public class AdvancedSetLinkedList<T> implements AdvancedSetInterface<T>
     public Node<T> getLLCopy()
     {
         Node<T> copyHead = new Node<>(head.getData());
-        Node<T> parser = head, copyParser = copyHead;
+        parser = head;
+        Node<T> copyParser = copyHead;
         if(parser.getNext() != null)
         {
             parser = parser.getNext();
@@ -260,7 +261,7 @@ public class AdvancedSetLinkedList<T> implements AdvancedSetInterface<T>
     public AdvancedSetInterface<T> union(AdvancedSetInterface<T> set)
     {
         AdvancedSetInterface<T> union = new AdvancedSetLinkedList<>();
-        Node<T> parser = head;
+        parser = head;
         while(parser != null)
         {
             union.add(parser.getData());
@@ -284,7 +285,7 @@ public class AdvancedSetLinkedList<T> implements AdvancedSetInterface<T>
     public AdvancedSetInterface<T> intersection(AdvancedSetInterface<T> set)
     {
         AdvancedSetInterface<T> intersection = new AdvancedSetLinkedList<>();
-        Node<T> parser = head;
+        parser = head;
         while(parser != null)
         {
             if(set.contains(parser.getData()))
@@ -305,7 +306,7 @@ public class AdvancedSetLinkedList<T> implements AdvancedSetInterface<T>
     public AdvancedSetInterface<T> complement(AdvancedSetInterface<T> set)
     {
         AdvancedSetInterface<T> complement = new AdvancedSetLinkedList<>();
-        Node<T> parser = head;
+        parser = head;
         while(parser != null)
         {
             if(!set.contains(parser.getData()))
