@@ -1,7 +1,6 @@
 package AS;
 
-public class Node<T>
-{
+public class Node<T> {
     private T data;
     private Node<T> next;
 
@@ -9,8 +8,7 @@ public class Node<T>
      * Constructor sets a node's data to the value passed in, and the next node to null.
      * @param data The value to be held by the node.
      */
-    public Node(T data)
-    {
+    public Node(T data) {
         this.data = data;
         next = null;
     }
@@ -19,8 +17,7 @@ public class Node<T>
      * setData Sets the node's data to the value passed in.
      * @param data The data to be held by the node.
      */
-    public void setData(T data)
-    {
+    public void setData(T data) {
         this.data = data;
     }
 
@@ -28,26 +25,23 @@ public class Node<T>
      * getData Returns the data held by the node.
      * @return The data held by the node.
      */
-    public T getData()
-    {
+    public T getData() {
         return data;
     }
 
     /**
-     * setNext Sets the next node in the linked list to the node passed in.
-     * @param next The next node in the linked list.
+     * setNext Sets the next node reference.
+     * @param next The next node reference.
      */
-    public void setNext(Node<T> next)
-    {
+    public void setNext(Node<T> next) {
         this.next = next;
     }
 
     /**
-     * getNext Returns the next node in the linked list.
-     * @return The next node in the linked list.
+     * getNext Returns the next node reference.
+     * @return The next node reference.
      */
-    public Node<T> getNext()
-    {
+    public Node<T> getNext() {
         return next;
     }
 }
